@@ -1,0 +1,14 @@
+{{ atlantis_domain }} {
+
+    reverse_proxy /events 127.0.0.1:{{ atlantis_port }}
+
+    reverse_proxy * 127.0.0.1:{{ oauth2_proxy_port }}
+
+    log {
+        output file /var/log/caddy.log {
+            roll_size 100mb
+            roll_keep 10
+            roll_keep_for 720h
+        }
+    }
+}

@@ -1,0 +1,62 @@
+---
+- name: Check whether Oauth2 Proxy binary already exists
+  stat:
+    path: /usr/local/bin/oauth2_proxy
+  register: oauth2_proxy
+
+- name: Get Oauth2 Proxy binary version
+  command: /usr/local/bin/oauth2_proxy -version
+  register: oauth2_proxy_version_check
+  changed_when: false
+  when: oauth2_proxy.stat.exists
+
+- name: Download Oauth2 Proxy archive
+  get_url:
+    url: "{{ oauth2_proxy_binary_url }}"
+    dest: /tmp/oauth2_proxy.tar.gz
+  when: not oauth2_proxy.stat.exists or not oauth2_proxy_version in oauth2_proxy_version_check.stdout
+
+- name: Extract Oauth2 Proxy binary from the archive
+  unarchive:
+    remote_src: yes
+    src: /tmp/oauth2_proxy.tar.gz
+    dest: /tmp
+    list_files: yes
+  register: oauth2_proxy_archive
+  when: not oauth2_proxy.stat.exists or not oauth2_proxy_version in oauth2_proxy_version_check.stdout
+
+- name: Copy Oauth2 Proxy binary to /usr/local/bin
+  copy:
+    src: "/tmp/{{ oauth2_proxy_archive.files[1]}}"
+    remote_src: yes
+    mode: "0755"
+    dest: /usr/local/bin/{{ oauth2_proxy_archive.files[1] | basename }}
+  when: not oauth2_proxy.stat.exists or not oauth2_proxy_version in oauth2_proxy_version_check.stdout
+
+- name: Make sure Oauth2 Proxy config dir exists
+  file:
+    path: /etc/oauth2-proxy
+    state: directory
+
+- name: Copy Oauth2 Proxy unit file
+  copy:
+    src: oauth2-proxy.service
+    dest: /lib/systemd/system/oauth2-proxy.service
+  register: oauth2_proxy_systemd
+  
+- name: Reload systemd daemon when Oauth2 Proxy unit file change
+  systemd:
+    daemon_reload: yes
+  when: oauth2_proxy_systemd.changed
+
+- name: Render Oauth2 Proxy config files
+  template:
+    src: oauth2-proxy.cfg.j2
+    dest: /etc/oauth2-proxy/oauth2-proxy.cfg
+  notify: Reload Oauth2 Proxy
+
+- name: Make sure Oauth2 Proxy is running
+  service:
+    name: oauth2-proxy
+    state: started
+    enabled: yes

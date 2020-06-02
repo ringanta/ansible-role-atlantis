@@ -1,0 +1,47 @@
+---
+- name: Make sure atlantis config directory exist
+  file:
+    name: /etc/atlantis
+    state: directory
+
+- name: Make sure unzip installed
+  apt:
+    name: unzip
+    state: present
+
+- name: Download and extract atlantis archive
+  unarchive:
+    remote_src: true
+    src: https://github.com/runatlantis/atlantis/releases/download/v0.12.0/atlantis_linux_amd64.zip
+    dest: /usr/local/bin
+
+- name: Copy atlantis systemd unit file
+  copy:
+    src: atlantis.service
+    dest: /lib/systemd/system/atlantis.service
+  register: atlantis_systemd
+
+- name: Reload systemd daemon when atlantis unit file change
+  systemd:
+    daemon_reload: yes
+  when: atlantis_systemd.changed
+  
+- name: Render atlantis server config
+  template:
+    src: config.yaml.j2
+    dest: /etc/atlantis/config.yaml
+    mode: "0640"
+  notify: Restart Atlantis
+
+- name: Copy atlantis repo config
+  copy:
+    src: repos.yaml
+    dest: /etc/atlantis/repos.yaml
+    mode: "0644"
+  notify: Restart Atlantis
+
+- name: Make sure Atlantis is running
+  service:
+    name: atlantis
+    state: started
+    enabled: yes

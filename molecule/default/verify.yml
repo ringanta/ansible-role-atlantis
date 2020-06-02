@@ -1,0 +1,16 @@
+---
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Populate services facts
+      service_facts:
+
+    - name: Verify that Caddy, Oauth2 Proxy, and Atlantis are running
+      assert:
+        that:
+          - ansible_facts.services["caddy.service"].state == 'running'
+          - ansible_facts.services["caddy.service"].status == 'enabled'
+          - ansible_facts.services["atlantis.service"].state == 'running'
+          - ansible_facts.services["atlantis.service"].status == 'enabled'
+          - ansible_facts.services["oauth2-proxy.service"].state == 'running'
+          - ansible_facts.services["oauth2-proxy.service"].status == 'enabled'

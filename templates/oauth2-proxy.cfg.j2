@@ -1,0 +1,18 @@
+http_address = "127.0.0.1:{{ oauth2_proxy_port }}"
+reverse_proxy = true
+upstreams = [
+    "http://127.0.0.1:{{ atlantis_port }}"
+]
+cookie_secret = "{{ oauth2_proxy_cookie_secret }}"
+provider = "github"
+client_id = "{{ oauth2_proxy_client_id }}"
+client_secret = "{{ oauth2_proxy_client_secret }}"
+{% if oauth2_proxy_gh_org != "" %}
+github_org = "{{ oauth2_proxy_gh_org }}"
+{% endif %}
+{% if oauth2_proxy_gh_team != "" %}
+github_team = "{{ oauth2_proxy_gh_team }}"
+{% endif %}
+email_domains = [
+    "*"
+]

@@ -1,0 +1,10 @@
+[Unit]
+Description=Atlantis Terraform server
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/atlantis server --config /etc/atlantis/config.yaml --repo-config /etc/atlantis/repos.yaml
+
+[Install]
+WantedBy=multi-user.target

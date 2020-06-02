@@ -1,0 +1,14 @@
+- name: Reload Caddy
+  service:
+    name: caddy
+    state: reloaded
+
+- name: Restart Atlantis
+  service:
+    name: atlantis
+    state: restarted
+
+- name: Reload Oauth2 Proxy
+  service:
+    name: oauth2-proxy
+    state: reloaded

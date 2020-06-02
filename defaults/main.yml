@@ -1,0 +1,7 @@
+atlantis_default_tf_version: 0.12.24
+atlantis_port: 8080
+oauth2_proxy_port: 4180
+oauth2_proxy_version: 5.1.1
+oauth2_proxy_binary_url: https://github.com/oauth2-proxy/oauth2-proxy/releases/download/v5.1.1/oauth2_proxy-v5.1.1.linux-amd64.go1.14.2.tar.gz
+oauth2_proxy_gh_org: ""
+oauth2_proxy_gh_team: ""
