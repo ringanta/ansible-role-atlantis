@@ -31,7 +31,7 @@
 
 - name: Copy Oauth2 Proxy binary to /usr/local/bin
   copy:
-    src: "/tmp/{{ oauth2_proxy_archive.files[1]}}"
+    src: "/tmp/{{ oauth2_proxy_archive.files[1] }}"
     remote_src: true
     mode: "0755"
     dest: /usr/local/bin/{{ oauth2_proxy_archive.files[1] | basename }}
@@ -48,12 +48,7 @@
   copy:
     src: oauth2-proxy.service
     dest: /lib/systemd/system/oauth2-proxy.service
-  register: oauth2_proxy_systemd
-
-- name: Reload systemd daemon when Oauth2 Proxy unit file change
-  systemd:
-    daemon_reload: true
-  when: oauth2_proxy_systemd.changed
+  notify: Reload Systemd Daemon
 
 - name: Render Oauth2 Proxy config files
   template:

@@ -21,12 +21,7 @@
   copy:
     src: atlantis.service
     dest: /lib/systemd/system/atlantis.service
-  register: atlantis_systemd
-
-- name: Reload systemd daemon when atlantis unit file change
-  systemd:
-    daemon_reload: true
-  when: atlantis_systemd.changed
+  notify: Reload Systemd Daemon
 
 - name: Render atlantis server config
   template:

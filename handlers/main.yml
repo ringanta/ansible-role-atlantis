@@ -13,3 +13,7 @@
   service:
     name: oauth2-proxy
     state: reloaded
+
+- name: Reload Systemd Daemon
+  systemd:
+    daemon_reload: true

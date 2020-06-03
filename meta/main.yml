@@ -17,6 +17,6 @@ galaxy_info:
   galaxy_tags:
     - atlantis
     - caddy
-    - oauth2-proxy
+    - oauth2proxy
 
 dependencies: []
