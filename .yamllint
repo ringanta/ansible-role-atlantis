@@ -1,0 +1,7 @@
+---
+extends: default
+
+rules:
+  truthy:
+    ignore: |
+      .github/workflows/publish-role-galaxy.yml
