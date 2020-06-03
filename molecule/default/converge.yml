@@ -9,7 +9,7 @@
         update_cache: true
         cache_valid_time: 600
       when: ansible_os_family == 'Debian'
-  
+
   roles:
     - role: ansible-role-atlantis
       atlantis_domain: 23.21.24.224.xip.io

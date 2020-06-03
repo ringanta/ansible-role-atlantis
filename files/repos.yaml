@@ -1,3 +1,4 @@
+---
 repos:
   - id: /.*/
     allow_custom_workflows: true

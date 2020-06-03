@@ -12,7 +12,9 @@
 - name: Download and extract atlantis archive
   unarchive:
     remote_src: true
-    src: https://github.com/runatlantis/atlantis/releases/download/v0.12.0/atlantis_linux_amd64.zip
+    src: >
+      https://github.com/runatlantis/atlantis/releases/download/v0.12.0/
+      atlantis_linux_amd64.zip
     dest: /usr/local/bin
 
 - name: Copy atlantis systemd unit file
@@ -23,9 +25,9 @@
 
 - name: Reload systemd daemon when atlantis unit file change
   systemd:
-    daemon_reload: yes
+    daemon_reload: true
   when: atlantis_systemd.changed
-  
+
 - name: Render atlantis server config
   template:
     src: config.yaml.j2
@@ -44,4 +46,4 @@
   service:
     name: atlantis
     state: started
-    enabled: yes
+    enabled: true

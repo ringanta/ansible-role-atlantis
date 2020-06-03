@@ -8,12 +8,21 @@ lint: |
   yamllint .
   ansible-lint
 platforms:
-  - name: instance
-    image: "geerlingguy/docker-${MOLECULE_DISTRO:-ubuntu1804}-ansible:latest"
+  - name: ubuntu1804
+    image: "geerlingguy/docker-ubuntu1804-ansible:latest"
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
+    pull: true
+    pre_build_image: true
+  - name: debian9
+    image: geerlingguy/docker-debian9-ansible:latest
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    pull: true
     pre_build_image: true
 provisioner:
   name: ansible
