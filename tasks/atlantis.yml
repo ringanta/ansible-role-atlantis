@@ -12,9 +12,7 @@
 - name: Download and extract atlantis archive
   unarchive:
     remote_src: true
-    src: >
-      https://github.com/runatlantis/atlantis/releases/download/v0.12.0/
-      atlantis_linux_amd64.zip
+    src: "{{ atlantis_binary_url }}"
     dest: /usr/local/bin
 
 - name: Copy atlantis systemd unit file

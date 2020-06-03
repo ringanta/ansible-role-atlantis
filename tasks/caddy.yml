@@ -1,4 +1,8 @@
 ---
+- name: Make sure apt https transport exists
+  apt:
+    name: apt-transport-https
+
 - name: Add Caddy repository
   apt_repository:
     repo: deb [trusted=yes] https://apt.fury.io/caddy/ /
